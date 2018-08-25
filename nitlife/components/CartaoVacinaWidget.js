@@ -43,7 +43,8 @@ export default class CartaoVacinaWidget extends React.Component {
             <Card style={{ borderRadius: getProportionalSize('h', 2.3), padding: getProportionalSize('h', 2.3) }}>
                 <CardItem bordered>
                     <Body>
-                        <Text>{this.state.prontuario.paciente.nomeSocial}</Text>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Carteira de Vacinação</Text>
+                        <Text style={{ fontWeight: 'bold' }}>{this.state.prontuario.paciente.nomeSocial}</Text>
                         <Text note style={{ width: "100%" }}>Data de nascimento: {moment(this.state.prontuario.paciente.dataNascimento, "YYYY-MM-DD").format('DD/MM/YYYY')}</Text>
                     </Body>
                 </CardItem> 
@@ -88,7 +89,7 @@ export default class CartaoVacinaWidget extends React.Component {
                 <CardItem>
                     <Left>
                         <TouchableOpacity onPress={() => { this.props.navigation.navigate('Prontuario', { prontuario: this.state.prontuario }); }}>
-                            <Image source={require("@images/vacinar2.png")} style={{ width: 32, height: 32 }} />
+                            <Image source={require("@images/vacinar2.png")} style={{ width: 48, height: 48 }} />
                         </TouchableOpacity>
                     </Left>
                     <Right />

@@ -10,6 +10,7 @@ import ProntuarioScreen from '../screens/ProntuarioScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
+  Links: LinksScreen
 });
 
 HomeStack.navigationOptions = {

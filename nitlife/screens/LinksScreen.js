@@ -37,10 +37,11 @@ export default class LinksScreen extends React.Component {
 
   constructor(props) {
     super(props);
+    let prontuario = props.navigation.state.params ? props.navigation.state.params.prontuario : null;
     this.state = {
         loading: false,
         cpf: '',
-        prontuario: null
+        prontuario: prontuario
     };
   }
 
@@ -82,7 +83,10 @@ export default class LinksScreen extends React.Component {
             }).catch((error) => {
                 this.exibirPrompt('Consulta por CPF', 'Paciente não encontrado!\n\nDeseja cadastrar um novo paciente?', 'Sim', 'Não', 
                 () => {
-                    this.props.navigation.navigate('Prontuario', { prontuario: null });
+                    this.setState({ loading: false });
+                    setTimeout(() => {
+                        this.props.navigation.navigate('Prontuario', { prontuario: null });
+                    }, 300);
                 });
 
                 this.setState({ cpf: "" });
@@ -116,7 +120,7 @@ export default class LinksScreen extends React.Component {
                         navigation={this.props.navigation}
                     />
 
-                    <Button rounded primary onPress={() => { this.setState({ prontuario: null }); }} style={{ width: '100%', marginTop: getProportionalSize('h', 2.29), marginBottom: getProportionalSize('h', 4.58), backgroundColor: '#4ba1d6', alignItems: 'center', alignSelf: 'center' }}>
+                    <Button rounded primary onPress={() => { this.setState({ prontuario: null, cpf: '' }); }} style={{ width: '100%', marginTop: getProportionalSize('h', 2.29), marginBottom: getProportionalSize('h', 4.58), backgroundColor: '#4ba1d6', alignItems: 'center', alignSelf: 'center' }}>
                         <Text style={{ width: '100%', color: '#ffffff', fontSize: getProportionalSize('h', 2.58), textAlign: 'center' }}>Nova consulta</Text>
                     </Button>
                 </View>

@@ -29,6 +29,7 @@ import { MonoText } from '../components/StyledText';
 import CameraWidget from "@components/CameraWidget";
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Permissions } from 'expo';
+import Constants from '@constants/Constants';
 
 import { Feather, FontAwesome, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -64,6 +65,20 @@ export default class HomeScreen extends React.Component {
         }, 100);
     }
 
+    exibirPrompt(titulo, msg, okText, cancelText, okCallback, cancelCallback) {
+      setTimeout(() => {
+          Alert.alert(
+              titulo,
+              msg,
+              [
+                  {text: cancelText, onPress: cancelCallback ? cancelCallback : () => {}, style: 'cancel'},
+                  {text: okText, onPress: okCallback ? okCallback : () => {}}
+              ],
+              { cancelable: false }
+          );
+      }, 100);
+    }
+
     async solicitarPermissao(permissao, nome, fnCallback) {
         const { Permissions } = Expo;
         let pendencias = this.state.pendencias;
@@ -73,6 +88,44 @@ export default class HomeScreen extends React.Component {
         }
         this.setState({ pendencias: pendencias });
         if (fnCallback) fnCallback(status);
+    }
+
+    consultarPacientePorFoto(photo) {
+      let localUri = photo.uri;
+      let filename = localUri.split('/').pop();
+      let match = /\.(\w+)$/.exec(filename);
+      let type = match ? `image/${match[1]}` : `image`;
+
+      let formData = new FormData();
+      formData.append('foto', { uri: localUri, name: filename, type });
+      fetch(Constants.URL.API + '/paciente/buscar', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': this.state.token
+          },
+          body: formData
+      }).then((response) => {
+          if (response.status == 200) {
+              response.json().then((data) => {
+                  this.setState({ loading: false });
+                  this.exibirMsgAviso('Paciente', 'Paciente identificado: ' + data.paciente.nomeSocial);
+                  setTimeout(() => {
+                    this.props.navigation.navigate('Links', { prontuario: data});
+                }, 300);
+              });
+          } else if (response.status == 404) {
+              this.setState({loading: false});
+              //this.exibirMsgAviso('Paciente', 'Erro ao identificar paciente');
+              this.exibirPrompt('Paciente', 'Paciente não identificado.\n\nDeseja pesquisar pelo CPF do paciente?', 'Sim', 'Não', 
+                () => {
+                  this.props.navigation.navigate('Links');
+                });
+          }
+      }).catch((error) => {
+          this.setState({loading: false});
+          console.log('Erro ao realizar upload da foto do paciente', error);
+      });
     }
 
     componentWillMount() {
@@ -105,10 +158,11 @@ export default class HomeScreen extends React.Component {
         <Spinner visible={this.state.loading} textContent={"Identificando paciente..."} textStyle={{color: '#FFF'}} />
         <View style={{ flex: 1 }}>
             <CameraWidget 
-                timerDefault={true}
+                timerDefault={false}
                 shooted={(photo) => {
                     //console.log('Shooted photo', photo);
                     this.setState({ loading: true });
+                    this.consultarPacientePorFoto(photo);
                 }}
                 showClose={false}
             />
