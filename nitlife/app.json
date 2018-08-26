@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "nitlife",
+    "name": "NitLife",
     "description": "A very interesting project.",
     "slug": "nitlife",
     "privacy": "public",
@@ -22,6 +22,10 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "versionCode": 2,
+      "package": "br.gov.rj.niteroi.nitlife"
     }
   }
 }

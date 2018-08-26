@@ -2,25 +2,17 @@ import React from 'react';
 import {
     View, 
     StyleSheet,
-    Alert,
-    Image,
-    TouchableOpacity
+    Alert
 } from 'react-native';
 import {
   Container,
-  Header,
-  Title,
   Content,
   Button,
-  Card,
-  CardItem,
   Text,
-  Body,
-  Left,
-  Right,
   Input,
   Form,
-  Item
+  Item,
+  Fab
 } from "native-base";
 import { getProportionalSize } from '@constants/Util';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -29,6 +21,7 @@ import Constants from '@constants/Constants';
 import moment from 'moment';
 import "moment/locale/pt-br";
 import CartaoVacinaWidget from "@components/CartaoVacinaWidget";
+import { Feather } from '@expo/vector-icons';
 
 export default class LinksScreen extends React.Component {
   static navigationOptions = {
@@ -126,6 +119,22 @@ export default class LinksScreen extends React.Component {
                 </View>
           }
         </Content>
+
+        { this.state.prontuario == null ?
+            <Fab
+                direction="up"
+                containerStyle={{}}
+                style={{ backgroundColor: "#4ba1d6" }}
+                position="bottomRight"
+                onPress={() => {
+                    this.setState({ loading: false });
+                    setTimeout(() => {
+                        this.props.navigation.navigate('Prontuario', { prontuario: null });
+                    }, 300);
+                }}>
+                    <Feather name="plus" size={getProportionalSize('h', 4.01)} color="#000000" />
+            </Fab>
+        : null }
       </Container>
     );
   }

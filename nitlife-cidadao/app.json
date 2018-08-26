@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "nitlife-cidadao",
+    "name": "NitLife Cidadão",
     "description": "A very interesting project.",
     "slug": "nitlife-cidadao",
     "privacy": "public",
@@ -24,8 +24,8 @@
       "supportsTablet": true
     },
     "android": {
-      "versionCode": 8,
-      "package": "me.taqtaq",
+      "versionCode": 1,
+      "package": "br.gov.rj.niteroi.nitlife.cidadao",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyDdjYj9wDs905z3l_PkWl_ts3GhIV-h9lY"
